@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Countdown Timer with Pops and Bangs</title>
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      color: white;
+      background: linear-gradient(135deg, #6a11cb, #2575fc); 
+      background-image: url(image1.png);
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+    }
+    .countdown-container {
+      text-align: center;
+      background: rgba(0, 0, 0, 0.7); /* Semi-transparent black background */
+      padding: 2rem;
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    }
+    .countdown-container h1 {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+      animation: fadeIn 1.5s ease-in-out;
+    }
+    .timer {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      margin-top: 1rem;
+      animation: bounceIn 1.5s ease-in-out;
+    }
+    .time-box {
+      background: rgb(255, 4, 4); /* Semi-transparent white */
+      border-radius: 15px;
+      padding: 1rem 1.5rem;
+      text-align: center;
+      font-size: 2rem;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    }
+    .time-box span {
+      display: block;
+      font-size: 0.8rem;
+      color: #ddd;
+      margin-top: 0.5rem;
+    }
+    @keyframes fadeIn {
+      0% {
+        opacity: 0;
+      }
+      100% {
+        opacity: 1;
+      }
+    }
+    @keyframes bounceIn {
+      0% {
+        transform: scale(0.5);
+        opacity: 0;
+      }
+      80% {
+        transform: scale(1.1);
+      }
+      100% {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
+    .confetti {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      pointer-events: none;
+    }
+    .confetti div {
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      background: rgba(255, 255, 255, 0.8);
+      opacity: 0;
+      animation: fall 3s linear infinite;
+    }
+    @keyframes fall {
+      0% {
+        transform: translateY(-100vh) rotate(0deg);
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(100vh) rotate(360deg);
+        opacity: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="countdown-container">
+    <h1>Countdown to meet AMMU 💕💕💕</h1>
+    <div class="timer" id="timer">
+      <div class="time-box">
+        <span id="days">0</span>
+        <span>Days</span>
+      </div>
+      <div class="time-box">
+        <span id="hours">00</span>
+        <span>Hours</span>
+      </div>
+      <div class="time-box">
+        <span id="minutes">00</span>
+        <span>Minutes</span>
+      </div>
+      <div class="time-box">
+        <span id="seconds">00</span>
+        <span>Seconds</span>
+      </div>
+    </div>
+  </div>
+  <div class="confetti" id="confetti"></div>
+  <audio id="pop-sound" src="pop.mp3"></audio>
+
+  <script>
+    const targetDate = new Date('January 17, 2025 03:07:00').getTime();
+
+    function updateCountdown() {
+      const now = new Date().getTime();
+      const timeLeft = targetDate - now;
+
+      if (timeLeft <= 0) {
+        clearInterval(timerInterval);
+        document.getElementById('timer').innerHTML = "<h2>Time's up!</h2>";
+        triggerCelebration();
+        return;
+      }
+
+      const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+
+      document.getElementById('days').innerText = days;
+      document.getElementById('hours').innerText = hours.toString().padStart(2, '0');
+      document.getElementById('minutes').innerText = minutes.toString().padStart(2, '0');
+      document.getElementById('seconds').innerText = seconds.toString().padStart(2, '0');
+    }
+
+    function triggerCelebration() {
+      const popSound = document.getElementById('pop-sound');
+      popSound.play();
+
+      const confettiContainer = document.getElementById('confetti');
+      for (let i = 0; i < 100; i++) {
+        const confetti = document.createElement('div');
+        confetti.style.left = Math.random() * 100 + '%';
+        confetti.style.animationDelay = Math.random() * 2 + 's';
+        confetti.style.background = `hsl(${Math.random() * 360}, 100%, 50%)`;
+        confettiContainer.appendChild(confetti);
+
+        setTimeout(() => confetti.remove(), 3000);
+      }
+    }
+
+    const timerInterval = setInterval(updateCountdown, 1000);
+  </script>
+</body>
+</html>
